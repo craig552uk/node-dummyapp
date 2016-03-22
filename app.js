@@ -13,6 +13,10 @@ PORT = args.port || 3000;
 app.use(parser.json());  // Parse request data as JSON
 app.use(log.middleware); // Log request/responses
 
+// Serve static files from root
+// Should be handled by NGinx in production
+app.use('/', express.static('static'));
+
 // Routes
 
 app.get('/api/', (req, res) => {
