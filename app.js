@@ -2,6 +2,7 @@ var express   = require('express');
 var parser    = require('body-parser');
 var args      = require('./utils/argparse');
 var log       = require('./utils/logger');
+var httpauth  = require('./utils/httpauth');
 var httperror = require('./utils/httperror');
 
 // Args from CLI or defaults
@@ -12,10 +13,19 @@ PORT = args.port || 3000;
 var app = express();
 app.use('/', express.static('static')); // Serve static files from root
 app.use(parser.json());                 // Parse request data as JSON
+app.use(httpauth.basic);                // Extract HTTP basic auth header
 app.use(log.middleware);                // Log request/responses
 
 // Route Handlers
 var common = require('./routes/common');
+
+// Restrict API to authenticated users
+app.use('/api/', function(req, res, next){
+    if(req.credentials.username != 'user' || req.credentials.password != 'passw0rd'){
+        throw httperror.Unauthorized("Incorrect user name and/or password");
+    }
+    next();
+});
 
 // Routes
 app.use('/api/echo',      common.echo);
