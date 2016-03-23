@@ -1,0 +1,9 @@
+{
+  "errors":[
+  {
+    "status": "503", 
+    "title":  "Service Unavailable", 
+    "detail": "Temporarily down for maintenance"
+  }
+  ]
+}
