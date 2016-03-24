@@ -26,6 +26,9 @@ exports.getAppropriateHTTPError = function(err){
         case 'HTTPError':
             return err;
         case 'SequelizeValidationError': 
+        case 'SequelizeUniqueConstraintError': 
+        case 'SequelizeExclusionConstraintError': 
+        case 'SequelizeForeignKeyConstraintError': 
             return exports.BadRequest(err.message);
         default:
             return exports.InternalServerError(err.message);
