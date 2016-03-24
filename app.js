@@ -35,8 +35,8 @@ app.use('/api/httperror', common.httpError);
 
 // JSON API dynamic routes
 var models = ['users'].join('|');
-app.use('/api/:model('+models+')/:id([0-9]+)/?$', DB.handleItem);
-app.use('/api/:model('+models+')/?$',             DB.handleItems);
+app.use('/api/:model('+models+')/:id([0-9a-z\-]+)/?$', DB.handleItem);
+app.use('/api/:model('+models+')/?$',                  DB.handleItems);
 
 // Not Found
 app.use((req, res, next) => {throw httperror.NotFound()});
