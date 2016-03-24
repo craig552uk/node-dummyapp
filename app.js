@@ -4,6 +4,7 @@ var args      = require('./utils/argparse');
 var log       = require('./utils/logger');
 var httpauth  = require('./utils/httpauth');
 var httperror = require('./utils/httperror');
+var jsonapi   = require('./utils/jsonapi');
 
 // Args from CLI or defaults
 HOST = args.host || '127.0.0.1';
@@ -31,6 +32,11 @@ app.use('/api/', function(req, res, next){
 app.use('/api/echo',      common.echo);
 app.use('/api/error',     common.error);
 app.use('/api/httperror', common.httpError);
+
+// JSON API dynamic routes
+var models = ['users'].join('|');
+app.use('/api/:model('+models+')/:id([0-9]+)/?$', jsonapi.handleItem);
+app.use('/api/:model('+models+')/?$',             jsonapi.handleItems);
 
 // 404 Handler
 app.use((req, res, next) => {throw httperror.NotFound()});
