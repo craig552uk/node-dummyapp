@@ -1,5 +1,5 @@
 var DB   = require('../utils/sequelize');
-var User = require('../models/user');
+var User = require('../models/users');
 
 
 // var drop_tables = true;
