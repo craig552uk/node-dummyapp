@@ -38,21 +38,13 @@ var models = ['users'].join('|');
 app.use('/api/:model('+models+')/:id([0-9]+)/?$', jsonapi.handleItem);
 app.use('/api/:model('+models+')/?$',             jsonapi.handleItems);
 
-// 404 Handler
+// Not Found
 app.use((req, res, next) => {throw httperror.NotFound()});
 
 // Error Handler
 app.use((err, req, res, next) => {
-
-    if(err.name !== 'HTTPError'){
-        // Only log application errors
-        log.error(err);
-
-        // Respond with InternalServerError
-        err = httperror.InternalServerError(err.message);
-    }
-
-    // JSONAPI error response
+    if(err.name != 'HTTPError') log.error(err);
+    err = httperror.getAppropriateHTTPError(err);
     res.status(err.code).jsonp({errors: [
         {status: err.code, title: err.message, detail: err.description}
     ]});

@@ -18,6 +18,20 @@ util.inherits(HTTPError, Error);
 
 exports.HTTPError = HTTPError;
 
+/**
+ * Map other errors onto HTTP errors
+ */
+exports.getAppropriateHTTPError = function(err){
+    switch(err.name){
+        case 'HTTPError':
+            return err;
+        case 'SequelizeValidationError': 
+            return exports.BadRequest(err.message);
+        default:
+            return exports.InternalServerError(err.message);
+    }
+}
+
 exports.BadRequest = function(detail){
     return new HTTPError(400, "Bad Request", detail);
 };
