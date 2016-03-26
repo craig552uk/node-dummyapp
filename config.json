@@ -1,0 +1,16 @@
+{
+    "development": {
+        "database": {
+            "dialect":  "sqlite",
+            "storage":  "db.sqlite"
+        }
+    },
+    "production": {
+        "database": {
+            "database": "node_test",
+            "username": "root",
+            "password": "passw0rd",
+            "dialect":  "mysql"
+        }
+    }    
+}

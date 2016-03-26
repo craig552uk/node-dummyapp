@@ -1,22 +1,7 @@
 var Sequelize = require('sequelize');
 var log       = require('./logger').child({scope:"Sequelize"});
 var httperror = require('./httperror');
-
-// var config = {
-//     database: 'node_test',
-//     username: 'root',
-//     password: 'passw0rd',
-//     host: 'localhost',
-//     dialect:  'mysql',
-// }
-
-var config = {
-    database: '',
-    username: '',
-    password: '',
-    dialect:  'sqlite',
-    storage:  'db.sqlite',
-}
+var config    = require('./config')['database'];
 
 // Setup common config
 config.logging = function(msg){ log.info(msg); }
