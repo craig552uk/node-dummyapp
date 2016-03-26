@@ -1,23 +1,31 @@
 var Sequelize = require('sequelize');
-var log       = require('./logger');
+var log       = require('./logger').child({scope:"Sequelize"});
 var httperror = require('./httperror');
 
-log = log.child({scope:"Sequelize"});
+// var config = {
+//     database: 'node_test',
+//     username: 'root',
+//     password: 'passw0rd',
+//     host: 'localhost',
+//     dialect:  'mysql',
+// }
 
 var config = {
-    database: 'node_test',
-    username: 'root',
-    password: 'passw0rd',
-    hostname: 'localhost',
-    dialect:  'mysql',
+    database: '',
+    username: '',
+    password: '',
+    dialect:  'sqlite',
+    storage:  'db.sqlite',
 }
 
-log.info({config: config});
+// Setup common config
+config.logging = function(msg){ log.info(msg); }
+config.define  = {instanceMethods:{}};
 
 /**
  * Return an object representation of an instance formatted for a jsonapi response
  */
-function jsonapi(){
+config.define.instanceMethods.jsonapi = function(){
     var modelName = this.$modelOptions.name.plural;
     var host = 'https://app.craig-russell.co.uk';
     return {
@@ -31,16 +39,8 @@ function jsonapi(){
 }
 
 // Construct instance with connection config and model defaults
-var sequelize = new Sequelize(config.database, config.username, config.password, {
-    host:    config.hostname,
-    dialect: config.dialect,
-    logging: function(msg){ log.info(msg); },
-    define: {
-        instanceMethods: {
-            jsonapi: jsonapi
-        }
-    }
-});
+log.info({config: config});
+var sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 /**
  * Attempt to load a model module or throw 404
