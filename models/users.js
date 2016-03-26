@@ -7,7 +7,12 @@ User = DB.sequelize.define('users', {
     password: {type: DB.Sequelize.STRING, allowNull: false, set: setPassword},
     name:     DB.Sequelize.STRING,
 }, {
-    instanceMethods: {checkPassword: checkPassword}
+    instanceMethods: {
+        checkPassword: checkPassword
+    },
+    classMethods: {
+        authenticate: authenticate
+    },
 });
 
 /**
@@ -24,6 +29,15 @@ function setPassword(password){
  */
 function checkPassword(password){
     return bcrypt.compareSync(password, this.password);
+}
+
+/**
+ * Attempt to authenticate a user
+ */
+function authenticate(username, password){
+    return User.findOne({where:{username:username}}).then(u => {
+        return (u && u.checkPassword(password)) ? u : undefined;
+    });
 }
 
 module.exports = User;
