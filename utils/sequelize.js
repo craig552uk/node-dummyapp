@@ -10,7 +10,7 @@ config.define  = {instanceMethods:{}};
 /**
  * Return an object representation of an instance formatted for a jsonapi response
  */
-config.define.instanceMethods.jsonapi = function(){
+config.define.instanceMethods.json = function(){
     var modelName = this.$modelOptions.name.plural;
     var host = 'https://app.craig-russell.co.uk';
     return {
