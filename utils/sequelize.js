@@ -45,7 +45,7 @@ function loadModel(modelName){
  */
 function modelList(model){
     return model.findAll()
-    .then(items => items.map(item => item.jsonapi()));
+    .then(items => items.map(item => item.json()));
 }
 
 /**
@@ -53,7 +53,7 @@ function modelList(model){
  */
 function modelAdd(model, data){
     return model.create(data)
-    .then(item => item.jsonapi())
+    .then(item => item.json())
 }
 
 /**
@@ -61,7 +61,7 @@ function modelAdd(model, data){
  */
 function modelGet(model, id){
     return model.findById(id).then(item => {
-        if(item) return item.jsonapi();
+        if(item) return item.json();
         throw httperror.NotFound();
     });
 }
@@ -73,7 +73,7 @@ function modelUpdate(model, id, data){
     return model.findById(id).then(item => {
         if(item) return item.update(data);
         throw httperror.NotFound();
-    }).then(item => item.jsonapi());
+    }).then(item => item.json());
 }
 
 /**
