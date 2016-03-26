@@ -5,6 +5,7 @@ var log       = require('./utils/logger');
 var httpauth  = require('./utils/httpauth');
 var httperror = require('./utils/httperror');
 var DB        = require('./utils/sequelize');
+var User      = require('./models/users');
 
 // Args from CLI or defaults
 HOST = args.host || '127.0.0.1';
@@ -22,10 +23,12 @@ var common = require('./routes/common');
 
 // Restrict API to authenticated users
 app.use('/api/', function(req, res, next){
-    if(req.credentials.username != 'user' || req.credentials.password != 'passw0rd'){
-        throw httperror.Unauthorized("Incorrect user name and/or password");
-    }
-    next();
+    var username = req.credentials.username;
+    var password = req.credentials.password;
+
+    User.authenticate(username, password).then(user => {
+        if(!user) return httperror.Unauthorized("Incorrect user name and/or password");
+    }).then(next);
 });
 
 // Useful Testing Routes
